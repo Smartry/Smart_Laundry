@@ -107,26 +107,3 @@ int get_neardetect_sensor(void)
     else
         return 0;
 }
-B
-C
-D
-D
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-A
-}

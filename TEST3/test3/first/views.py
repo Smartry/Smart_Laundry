@@ -17,8 +17,8 @@ class SensorViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def get_data(self, request, pk=None):
-        # return Response({'code': 'test'})
-        return Response({'number': 'test', 'servo': 'test1', 'code': 'test2'})
+        # return Response({'numbers': 'test'})
+        return Response({'numbers': 'test', 'servo': 'test1', 'code': 'test2'})
 # 
 
         # return Response(serializer.data)

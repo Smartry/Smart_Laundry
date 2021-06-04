@@ -72,6 +72,7 @@ try:
             cap = cv2.VideoCapture(0)
             a = ''
             i = 0
+            # test = "test2"
 
             while cap.isOpened():
                 ret, img = cap.read()
@@ -94,8 +95,11 @@ try:
             cv2.destroyAllWindows()
             print(a)
 
+
+
             # Transferring data to server
-            data = {'code': a}    
+            data = {'numbers': '1','code': a}    
+            # data = {'numbers': "test2"}    
             r = requests.post('http://127.0.0.1:8000/post/', data=data)        
 
             if GPIO.input(door):        # if door open

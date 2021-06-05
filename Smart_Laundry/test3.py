@@ -1,7 +1,7 @@
 import requests
 import json
-data = {'code': 'dbsrud1234'}    
-r = requests.post('http://127.0.0.1:8000/', data=data)        
+data = {'is_wm_reserved': 'mmy789@naver.com'}    
+r = requests.post('http://127.0.0.1:8000/WM/test/', data=data)        
 # r = requests.post('http://127.0.0.1:8000/post/', data=data)   
     
 print(r.text)

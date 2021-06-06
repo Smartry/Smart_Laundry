@@ -42,35 +42,50 @@ try:
         GPIO.output(led_red, 0)     # RED OFF
         GPIO.output(led_blue, 0)    # BLUE OFF
 
-        # QR Code 
-        cap = cv2.VideoCapture(0)
-        a = ''
-        i = 0
+        # # QR Code 
+        # cap = cv2.VideoCapture(0)
+        # a = ''
+        # i = 0
 
-        while cap.isOpened():
-            ret, img = cap.read()
+        # while cap.isOpened():
+        #     ret, img = cap.read()
 
-            if not ret:
-                continue
+        #     if not ret:
+        #         continue
 
-            gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-            decoded = pyzbar.decode(gray)
+        #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+        #     decoded = pyzbar.decode(gray)
 
-            for d in decoded:
-                a = d.data
+        #     for d in decoded:
+        #         a = d.data
 
-            if len(a) >= 1:
-                break
-            cv2.imshow('img', img)
-            key = cv2.waitKey(1)
+        #     if len(a) >= 1:
+        #         break
+        #     cv2.imshow('img', img)
+        #     key = cv2.waitKey(1)
 
-        cap.release()
-        cv2.destroyAllWindows()
-        print(a)
+        # cap.release()
+        # cv2.destroyAllWindows()
+        # print(a)
 
+        data = {
+                'is_locker_reserved': 'mmydbsrud9126@naver.com',
+                'proximity_sensor': False,
+                'lock': True,
+                }    
+        # url = 'http://127.0.0.1:8000/WM/test/<int:pk>'
+        # url = 'http://127.0.0.1:8000/WM/test/<int:pk>/'
+        # url = 'http://127.0.0.1:8000/WM/test/60/'
+        url = 'http://127.0.0.1:8000/locker/test/74/'
+        r = requests.post(url, data=data)
+
+        # print(r.text)
+        # print(r.json())
+        print(r.content)
+        print("TEST")
         # Transferring data to server
-        data = {'code': a}    
-        r = requests.post('http://127.0.0.1:8000/post/', data=data)        
+        # data = {'code': a}    
+        # r = requests.post('http://127.0.0.1:8000/post/', data=data)        
 
         if GPIO.input(door):        # if door open
             lcd.message("Door is open")

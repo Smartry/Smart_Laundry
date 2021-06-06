@@ -11,7 +11,9 @@ urlpatterns = [
     path('timer/<int:pk>/', views.WashingMachineTimer.as_view()),
     path('timer/<int:pk>/', views.WashingMachineTimer.as_view()),
     path('test/<int:pk>/', views.get_data),
-    #path('test/<int:pk>/', views.get_detail),     
+    # path('test/', views.get_data),
+    path('test/', views.get_data_test),
+    # path('test/<int:pk>/', views.get_detail),
     # path('test/<int:pk>/', views.WashingMachineTest.as_view()),     
     # path('test/')
 ]

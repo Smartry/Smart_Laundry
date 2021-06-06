@@ -14,10 +14,6 @@ class WashingMachine(models.Model):
     proximity_sensor = models.BooleanField(default=False)
     # 세탁기 잠금 장치
     lock = models.BooleanField(default=False)
-    # 세탁기 서보 모터
-    servo_motor = models.BooleanField(default=False)
-    # 세탁기 모터
-    motor = models.IntegerField(default=0)
     # 에러 발생 여부
     is_error_occurred = models.BooleanField(default=False)
     # 에러 종류

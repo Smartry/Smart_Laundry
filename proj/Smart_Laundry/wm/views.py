@@ -31,12 +31,19 @@ from rest_framework.parsers import JSONParser
 @api_view(['GET','POST'])
 @permission_classes([AllowAny])
 def get_data(request, pk):
+# def get_data(request):
+    # last = WashingMachine.objects.last()
+    # key = last.id
+
     if request.method == "POST":
         wm = WashingMachine.objects.get(pk=pk)
         print("1", wm.is_wm_reserved)
         wm2 = wm.is_wm_reserved
+        wm.proximity_sensor = request.data['proximity_sensor']
+        wm.lock = request.data['lock']
+        wm.wm_options = request.data['wm_options']
         if wm2 == request.data['is_wm_reserved']:
-            wm.is_user_matched = True
+            wm.is_user_matched = True            
             wm.save()
             wm_data = WashingMachineSerializer(wm)
             print(wm)
@@ -51,10 +58,24 @@ def get_data(request, pk):
         #     return Response(s)
         
     elif request.method == "GET":
+        WashingMachines = WashingMachine.objects.get(pk=pk)
+        wm_serializers = WashingMachineSerializer(WashingMachines)
+        return Response(wm_serializers.data)
+
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
+def get_data_test(request):
+    if request.method == "POST":
+        wm_serializers = WashingMachineSerializer(data=request.data)
+        s = '111'
+        if wm_serializers.is_valid(raise_exception=True):
+            wm_serializers.save()
+            return Response(request.data)
+        
+    elif request.method == "GET":
         WashingMachines = WashingMachine.objects.all()
         wm_serializers = WashingMachineSerializer(WashingMachines, many=True)
         return Response(wm_serializers.data)
-
 
 @api_view(['GET', 'PUT', 'DELETE'])
 @permission_classes([AllowAny])
@@ -82,78 +103,7 @@ def get_detail(request, pk):
             print(wm)
             return Response(wm_data.data)
 
-        #wm_data = JSONParser().parse(request) 
-        #wm_serializer = WashingMachineSerializer(wm, data=wm_data)
-        # if wm_serializer.is_valid():
-        #print("3", wm.is_wm_reserved)
-                
-        #if wm_serializer.is_valid():
-            # wm_serializer.save()
-            #print("4_1", wm.is_wm_reserved)
-            # wm_instance = wm_serializer.save()
-            #wm_instance = wm_serializer.save(wm_serializer.data['is_wm_reserved'])
-            # print("4", wm.is_wm_reserved)
-            # print("INSTANCE", wm_instance.is_wm_reserved)
-            # # print(wm_instance)
-            # post = PostCreateSerializer(data=request.data, context={'request': request})
-            # post.is_valid(raise_excpetions=True)
-            # post_instance = post.save()
-            # media_url = post_instance.media.url
-            # link = find_link_value()
-            # post_instance.link = link
-            # post_instance.save()
 
-            # if wm_serializer.validated_data:
-            #print(wm.is_wm_reserved, wm2)
-            # if wm.is_wm_reserved == wm2.is_wm_reserved:
-                # print("YES!")
-            # else:
-                # print("NO!")
-            # print(wm_serializer.data['is_wm_reserved'] == wm2.is_wm_reserved)
-            # if wm_serializer.data['is_wm_reserved'] == wm2.is_wm_reserved:
-            # if wm_serializer.data['is_wm_reserved'] == wm2:
-            # # if wm_instance.is_wm_reserved == wm2:
-            #     print("5", wm.is_wm_reserved)
-            #     print('True!!!!!!!!!')
-            #     # wm_instance.save()
-            #     # wm_instance.is_user_matched = True
-            #     wm.is_user_matched = True
-            #     wm_instance.save()
-            #     print("6", wm.is_wm_reserved)
-
-            #     return Response(wm_serializer.data)
-                # return Response(wm_instance.data)  
-        #     #wm_serializer.data['is_user_matched'] = True
-        #     wm_serializer2 = WashingMachineSerializer(wm)
-        #     if wm_serializer2.is_valid():
-        #         wm_serializer2.save()
-
-                # wm_serializer.data['is_user_matched'] = True
-                # wm_serializer = WashingMachineSerializer(wm)
-                # wm.is_user_matched = True
-                # return Response(wm.is_user_matched)    
-                # wm_serializer.save() 
-                # return Response(wm_serializer.data)       
-                # return Response(wm)   
-        else:
-            str = "False!!!!!!"
-            # wm.is_user_matched = False
-            # print("7", wm.is_wm_reserved)
-            return Response(str)
-
-        
-            # print(wm_serializer.data['is_wm_reserved'])
-            # print(type(wm_serializer.data['is_wm_reserved']))
-            # print(wm.is_wm_reserved)
-            # print(type(wm.is_wm_reserved))
-            
-            # return Response(wm_serializer.data)    
-                # wm_serializer.save() 
-            #print(type(wm))
-        #return Response(type(wm))      
-        #return Response(wm_serializer.errors, status=status.HTTP_400_BAD_REQUEST) 
-        # return Response("is wm matched") 
- 
     elif request.method == 'DELETE':
         wm.delete() 
         print('delete')

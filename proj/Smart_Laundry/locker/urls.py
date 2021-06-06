@@ -9,4 +9,6 @@ urlpatterns = [
     path('error/<int:pk>/', views.SmartLockerError.as_view()),
     path('user/<int:pk>/', views.SmartLockerUser.as_view()),
     path('timer/<int:pk>/', views.SmartLockerTimer.as_view()),
+    path('test/<int:pk>/', views.get_data),
+    path('test/', views.get_data_test),
 ]

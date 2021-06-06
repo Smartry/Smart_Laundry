@@ -9,6 +9,91 @@ from addresses.serializers import AddressesSerializer
 from .serializers import SmartLockerSerializer
 from .timer import locker_timer
 
+from django.shortcuts import render
+from rest_framework.response import Response
+from rest_framework.decorators import api_view
+from rest_framework.views import APIView
+from rest_framework import status
+from rest_framework.generics import get_object_or_404
+
+from rest_framework import viewsets
+from rest_framework.decorators import action 
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser 
+
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
+def get_data(request, pk):
+    if request.method == "POST":
+        locker = SmartLocker.objects.get(pk=pk)
+        locker2 = locker.is_locker_reserved
+        locker.proximity_sensor = request.data['proximity_sensor']
+        locker.lock = request.data['lock']
+        if locker2 == request.data['is_locker_reserved']:
+            locker.is_user_matched = True            
+            locker.save()
+            locker_data = SmartLockerSerializer(locker)
+            print(locker)
+            return Response(locker_data.data)
+        else:
+            locker.is_user_matched = False
+            locker.save()
+            locker_data = SmartLockerSerializer(locker)
+            return Response(locker_data.data)
+
+    elif request.method == "GET":
+        SmartLockers = SmartLocker.objects.get(pk=pk)
+        locker_serializers = SmartLockerSerializer(SmartLockers)
+        return Response(locker_serializers.data)
+
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
+def get_data_test(request):
+    if request.method == "POST":
+        SmartLockers = SmartLockerSerializer(data=request.data)
+        s = '111'
+        if SmartLockers.is_valid(raise_exception=True):
+            SmartLockers.save()
+            return Response(request.data)
+        
+    elif request.method == "GET":
+        SmartLockers = SmartLocker.objects.all()
+        locker_serializers = SmartLockerSerializer(SmartLocker, many=True)
+        return Response(locker_serializers.data)
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
+def get_detail(request, pk):
+    try: 
+        locker = SmartLocker.objects.get(pk=pk)
+        # print("1", wm.is_wm_reserved)
+        locker2 = wm.is_wm_reserved
+        
+    except SmartLocker.DoesNotExist: 
+        return JsonResponse({'message': 'The WashingMachine does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+ 
+    if request.method == 'GET': 
+        locker_serializer = SmartLockerSerializer(locker) 
+        return Response(wm_serializer.data) 
+ 
+    elif request.method == 'PUT':
+        # print("2", wm.is_wm_reserved)
+        if locker2 == request.data['is_locker_reserved']:
+            locker.is_user_matched = True
+            locker.save()
+            locker_data = SmartLockerSerializer(locker)
+            print(locker)
+            return Response(locker_data.data)
+
+
+    elif request.method == 'DELETE':
+        locker.delete() 
+        print('delete')
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class SmartLockerList(APIView):
     """

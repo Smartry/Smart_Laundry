@@ -96,17 +96,11 @@ try:
                 'lock': True,
                 'wm_options': 'start'
                 }    
-        # url = 'http://127.0.0.1:8000/WM/test/<int:pk>'
-        # url = 'http://127.0.0.1:8000/WM/test/<int:pk>/'
-        # url = 'http://127.0.0.1:8000/WM/test/60/'
         url = 'http://127.0.0.1:8000/WM/test/74/'
         r = requests.post(url, data=data)
 
-        # print(r.text)
-        # print(r.json())
         print(r.content)
-        print("TEST")
-        # r = requests.post('http://127.0.0.1:8000/post/', data=data)        
+        print("TEST")     
 
         if GPIO.input(door):        # if door open
             lcd.message("Door is open")

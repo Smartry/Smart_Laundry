@@ -3,6 +3,8 @@ from django.db import models
 
 class AccessSystem(models.Model):
     id = models.AutoField(primary_key=True)
+    # 회원 등록 여부
+    smartry_id = models.CharField(max_length=20, null=True)
     # 출입문 개폐 상태
     is_access_door_open = models.BooleanField(default=False)
     # 출입문 근접 센서

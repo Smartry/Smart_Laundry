@@ -58,202 +58,145 @@ try:
         GPIO.output(led_green, 0)   # GREEN OFF
         GPIO.output(led_red, 0)     # RED OFF
         GPIO.output(led_blue, 0)    # BLUE OFF
-        # PIR 
-        input_state = GPIO.input(17)
+        # # PIR 
+        # input_state = GPIO.input(17)
 
-        # Detected
-        if input_state == True:                
-            GPIO.output(led_green, 1)
-            GPIO.output(led_red, 1)
-            GPIO.output(led_blue, 1) 
-            print("Motion Detected")
+        # # Detected
+        # if input_state == True:                
+        #     GPIO.output(led_green, 1)
+        #     GPIO.output(led_red, 1)
+        #     GPIO.output(led_blue, 1) 
+        #     print("Motion Detected")
 
-            # QR Code 
-            cap = cv2.VideoCapture(0)
-            a = ''
-            i = 0
-            # test = "test2"
+            # # QR Code 
+            # cap = cv2.VideoCapture(0)
+            # a = ''
+            # i = 0
+            # # test = "test2"
 
-            while cap.isOpened():
-                ret, img = cap.read()
+            # while cap.isOpened():
+            #     ret, img = cap.read()
 
-                if not ret:
-                    continue
+            #     if not ret:
+            #         continue
 
-                gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-                decoded = pyzbar.decode(gray)
+            #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+            #     decoded = pyzbar.decode(gray)
 
-                for d in decoded:
-                    a = d.data
+            #     for d in decoded:
+            #         a = d.data
 
-                if len(a) >= 1:
-                    break
-                cv2.imshow('img', img)
-                key = cv2.waitKey(1)
+            #     if len(a) >= 1:
+            #         break
+            #     cv2.imshow('img', img)
+            #     key = cv2.waitKey(1)
 
-            cap.release()
-            cv2.destroyAllWindows()
-            print(a)
-
+            # cap.release()
+            # cv2.destroyAllWindows()
+            # print(a)
 
 
             # Transferring data to server
-            data = {'numbers': '1','code': a}    
-            # data = {'numbers': "test2"}    
-            r = requests.post('http://127.0.0.1:8000/post/', data=data)        
-
-            if GPIO.input(door):        # if door open
-                lcd.message("Door is open")
-                print("Door is open")
-                time.sleep(2.0)
-                lcd.clear()
-                b.start(50.0)
-                time.sleep(1.0)
-                b.stop()
-                # p1.ChangeDutyCycle(2.5)
-                # p2.ChangeDutyCycle(2.5)
-                # time.sleep(0.5)
-
-            else:                       # if door close
-                lcd.message("Door is close")
-                print("Door is close")
-                time.sleep(2.0)
-                lcd.clear()
-
-            # Correct
-            if len(a) >= 1:
-                print(r.status_code)
-                print("Welcome")
-                
-                lcd.message("Welcome!")     # lcd 'welcome'   
-                time.sleep(2.0)
-                lcd.clear()                 # display clear
-                GPIO.output(led_green, 1)   # GREEN ON
-                GPIO.output(led_red, 0)     # RED OFF
-                GPIO.output(led_blue, 0)    # BLUE OFF
-                
-                # GPIO.output(locker, 1)      # LOCKER OPEN
-                p1.ChangeDutyCycle(2.5)
-                p2.ChangeDutyCycle(7)
-                # p2.ChangeDutyCycle(2.5)
-                time.sleep(0.5)
-                p1.ChangeDutyCycle(6)
-                p2.ChangeDutyCycle(2.5)
-                # p2.ChangeDutyCycle(9.5)
-                time.sleep(0.5)
-                # p1.ChangeDutyCycle(6)
-                # time.sleep(0.5)
-                # GPIO.output(locker, 0)      # LOCKER CLOSE AGAIN
-
-                if GPIO.input(door):        # if door open
-                    lcd.message("Door is open")
-                    print("Door is open")
-                    time.sleep(2.0)
-                    lcd.clear()
-                    b.start(50.0)
-                    time.sleep(1.0)
-                    b.stop()
-                    # p1.ChangeDutyCycle(2.5)
-                    # p2.ChangeDutyCycle(2.5)
-                    # time.sleep(0.5)
-
-                else:                       # if door close
-                    lcd.message("Door is close")
-                    print("Door is close")
-                    time.sleep(2.0)
-                    lcd.clear()
-            
-            # Incorrect
-            else:
-                print("Try again!")
-                lcd.message("Try again!")   # lcd 'Try again' print
-                time.sleep(2.0)
-                lcd.clear()                 # display clear
-                GPIO.output(led_green, 0)   # GREEN OFF
-                GPIO.output(led_red, 1)     # RED ON
-                GPIO.output(led_blue, 0)    # RED OFF
-
-                # GPIO.output(locker, 0)      # LOCKER CLOSE
-                b.start(50.0)
-                time.sleep(1.0)
-                b.stop()
-                p1.ChangeDutyCycle(0)
-                p2.ChangeDutyCycle(0)
-                time.sleep(0)
-
-            p1.ChangeDutyCycle(0)
-            p2.ChangeDutyCycle(0)
-            time.sleep(0)
-
-        # No Detection
-        else:        
-            GPIO.output(led_green, 0)   # GREEN OFF
-            GPIO.output(led_red, 0)     # RED OFF
-            GPIO.output(led_blue, 0)    # BLUE OFF
-            print("No Detection")
-            
-        GPIO.output(led_green, 0)   # GREEN OFF
-        GPIO.output(led_red, 0)     # RED OFF
-        GPIO.output(led_blue, 0)    # BLUE OFF
-        time.sleep(0.2)
-
-        # # QR Code 
-        # cap = cv2.VideoCapture(0)
-        # a = ''
-        # i = 0
-
-        # while cap.isOpened():
-        #     ret, img = cap.read()
-
-        #     if not ret:
-        #         continue
-
-        #     gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-        #     decoded = pyzbar.decode(gray)
-
-        #     for d in decoded:
-        #         a = d.datar
-        #     GPIO.output(led_green, 1)   # GREEN ON
-        #     GPIO.output(led_red, 0)     # RED OFF
-        #     GPIO.output(locker, 1)      # LOCKER OPEN
-        #     p.ChangeDutyCycle(9.5)
-        #     time.sleep(0.5)
-        #     p.ChangeDutyCycle(2.5)
-        #     time.sleep(0.5)
-        #     GPIO.output(locker, 0)      # LOCKER CLOSE AGAIN
+        data = {'smartry_id': 'mmy6789@naver.com',
+                'proximity_sensor': True,
+                'lock': False,
+                'servo_motor': False}    
+        r = requests.post('http://127.0.0.1:8000/access/test/1/', data=data)        
 
         #     if GPIO.input(door):        # if door open
         #         lcd.message("Door is open")
+        #         print("Door is open")
         #         time.sleep(2.0)
         #         lcd.clear()
         #         b.start(50.0)
         #         time.sleep(1.0)
         #         b.stop()
-        #         p.ChangeDutyCycle(2.5)
-        #         time.sleep(0.5)
+        #         # p1.ChangeDutyCycle(2.5)
+        #         # p2.ChangeDutyCycle(2.5)
+        #         # time.sleep(0.5)
 
         #     else:                       # if door close
         #         lcd.message("Door is close")
+        #         print("Door is close")
         #         time.sleep(2.0)
         #         lcd.clear()
 
-        # # Incorrect
-        # else:
-        #     print("Try again!")
-        #     lcd.message("Try again!")   # lcd 'Try again' print
-        #     time.sleep(2.0)
-        #     lcd.clear()                 # display clear
-        #     GPIO.output(led_green, 0)   # GREEN OFF
-        #     GPIO.output(led_red, 1)     # RED ON
-        #     GPIO.output(locker, 0)      # LOCKER CLOSE
-        #     b.start(50.0)
-        #     time.sleep(1.0)
-        #     b.stop()
-        #     p.ChangeDutyCycle(0)
+        #     # Correct
+        #     if len(a) >= 1:
+        #         print(r.status_code)
+        #         print("Welcome")
+                
+        #         lcd.message("Welcome!")     # lcd 'welcome'   
+        #         time.sleep(2.0)
+        #         lcd.clear()                 # display clear
+        #         GPIO.output(led_green, 1)   # GREEN ON
+        #         GPIO.output(led_red, 0)     # RED OFF
+        #         GPIO.output(led_blue, 0)    # BLUE OFF
+                
+        #         # GPIO.output(locker, 1)      # LOCKER OPEN
+        #         p1.ChangeDutyCycle(2.5)
+        #         p2.ChangeDutyCycle(7)
+        #         # p2.ChangeDutyCycle(2.5)
+        #         time.sleep(0.5)
+        #         p1.ChangeDutyCycle(6)
+        #         p2.ChangeDutyCycle(2.5)
+        #         # p2.ChangeDutyCycle(9.5)
+        #         time.sleep(0.5)
+        #         # p1.ChangeDutyCycle(6)
+        #         # time.sleep(0.5)
+        #         # GPIO.output(locker, 0)      # LOCKER CLOSE AGAIN
+
+        #         if GPIO.input(door):        # if door open
+        #             lcd.message("Door is open")
+        #             print("Door is open")
+        #             time.sleep(2.0)
+        #             lcd.clear()
+        #             b.start(50.0)
+        #             time.sleep(1.0)
+        #             b.stop()
+        #             # p1.ChangeDutyCycle(2.5)
+        #             # p2.ChangeDutyCycle(2.5)
+        #             # time.sleep(0.5)
+
+        #         else:                       # if door close
+        #             lcd.message("Door is close")
+        #             print("Door is close")
+        #             time.sleep(2.0)
+        #             lcd.clear()
+            
+        #     # Incorrect
+        #     else:
+        #         print("Try again!")
+        #         lcd.message("Try again!")   # lcd 'Try again' print
+        #         time.sleep(2.0)
+        #         lcd.clear()                 # display clear
+        #         GPIO.output(led_green, 0)   # GREEN OFF
+        #         GPIO.output(led_red, 1)     # RED ON
+        #         GPIO.output(led_blue, 0)    # RED OFF
+
+        #         # GPIO.output(locker, 0)      # LOCKER CLOSE
+        #         b.start(50.0)
+        #         time.sleep(1.0)
+        #         b.stop()
+        #         p1.ChangeDutyCycle(0)
+        #         p2.ChangeDutyCycle(0)
+        #         time.sleep(0)
+
+        #     p1.ChangeDutyCycle(0)
+        #     p2.ChangeDutyCycle(0)
         #     time.sleep(0)
 
-        # p.ChangeDutyCycle(0)
-        # time.sleep(0)
+        # # No Detection
+        # else:        
+        #     GPIO.output(led_green, 0)   # GREEN OFF
+        #     GPIO.output(led_red, 0)     # RED OFF
+        #     GPIO.output(led_blue, 0)    # BLUE OFF
+        #     print("No Detection")
+            
+        # GPIO.output(led_green, 0)   # GREEN OFF
+        # GPIO.output(led_red, 0)     # RED OFF
+        # GPIO.output(led_blue, 0)    # BLUE OFF
+        # time.sleep(0.2)
 
 except KeyboardInterrupt:
     p1.stop()

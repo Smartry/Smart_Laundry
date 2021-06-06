@@ -110,8 +110,6 @@ def get_detail(request, pk):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-
-
 class WashingMachineList(APIView):
     """
     목록에 대한 View
@@ -178,7 +176,7 @@ class WashingMachineDoor(APIView):
         serializer = WashingMachineSerializer(wm, data=request.data)
 
         if serializer.is_valid():
-            if wm.proximity_WashingMachine and wm.lock and wm.servo_motor:
+            if wm.proximity_WashingMachine and wm.lock:
                 wm.is_wm_door_open = 1
             else:
                 wm.is_wm_door_open = 0
@@ -205,9 +203,6 @@ class WashingMachineError(APIView):
                 # 잠금 장치가 고장났을 경우
                 if not wm.lock:
                     wm.error = 'LE'
-                # 서보모터가 고장났을 경우
-                if not wm.servo_motor:
-                    wm.error = 'ME'
             return Response(serializer.data)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

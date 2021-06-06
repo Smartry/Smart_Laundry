@@ -7,4 +7,6 @@ urlpatterns = [
     path('door/<int:pk>/', views.AccessSystemDoor.as_view()),
     path('error/<int:pk>/', views.AccessSystemError.as_view()),
     path('user/<int:pk>/', views.AccessSystemUser.as_view()),
+    path('test/<int:pk>/', views.get_data),
+    path('test/', views.get_data_test),
 ]

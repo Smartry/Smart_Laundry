@@ -7,6 +7,90 @@ from .models import AccessSystem
 from .serializers import AccessSystemSerializer
 from addresses.models import Addresses
 
+from rest_framework import viewsets
+from rest_framework.decorators import action 
+
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+from django.http.response import JsonResponse
+from rest_framework.parsers import JSONParser 
+
+
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
+def get_data(request, pk):
+    if request.method == "POST":
+        access = AccessSystem.objects.get(pk=pk)
+        print("1", access.smartry_id)
+        access2 = access.smartry_id
+        access.proximity_sensor = request.data['proximity_sensor']
+        access.lock = request.data['lock']
+        access.servo_motor = request.data['servo_motor']
+
+        if access2 == request.data['smartry_id']:
+            access.is_user_matched = True            
+            access.save()
+            access_data = AccessSystemSerializer(access)
+            print(access)
+            return Response(access_data.data)
+        else:
+            access.is_user_matched = False
+            access.save()
+            access_data = AccessSystemSerializer(access)
+            return Response(access_data.data)
+
+    elif request.method == "GET":
+        AccessSystems = AccessSystem.objects.get(pk=pk)
+        access_serializers = AccessSystemSerializer(AccessSystems)
+        return Response(access_serializers.data)
+
+@api_view(['GET','POST'])
+@permission_classes([AllowAny])
+def get_data_test(request):
+    if request.method == "POST":
+        access_serializers = AccessSystemSerializer(data=request.data)
+        if access_serializers.is_valid(raise_exception=True):
+            access_serializers.save()
+            return Response(request.data)
+        
+    elif request.method == "GET":
+        AccessSystems = AccessSystem.objects.all()
+        access_serializers = AccessSystemSerializer(AccessSystems, many=True)
+        return Response(access_serializers.data)
+
+
+@api_view(['GET', 'PUT', 'DELETE'])
+@permission_classes([AllowAny])
+def get_detail(request, pk):
+    try: 
+        # AccessSystem = AccessSystem.objects.all()
+        access = AccessSystem.objects.get(pk=pk)
+        print("1", access.smartry_id)
+        access2 = access.smartry_id
+        # access2 = AccessSystem.objects.get(pk=pk)
+        
+    except AccessSystem.DoesNotExist: 
+        return JsonResponse({'message': 'The AccessSystem does not exist'}, status=status.HTTP_404_NOT_FOUND) 
+ 
+    if request.method == 'GET': 
+        access_serializer = AccessSystemSerializer(access) 
+        return Response(access_serializer.data) 
+ 
+    elif request.method == 'PUT':
+        print("2", access.smartry_id)
+        if access2== request.data['smartry_id']:
+            access.is_user_matched = True
+            access.save()
+            access_data = AccessSystemSerializer(access)
+            print(access)
+            return Response(access_data.data)
+
+
+    elif request.method == 'DELETE':
+        access.delete() 
+        print('delete')
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class AccessSystemList(APIView):
     """

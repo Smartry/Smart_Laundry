@@ -76,17 +76,17 @@ try:
                 time.sleep(2.0)
                 lcd.clear()
         
-                # if GPIO.input(start) is 1:
-                #     s.start()
+                if GPIO.input(start) is 1:
+                    s.start()
                     
-                #     for i in range(100):
-                #         s.ChangeDutyCycle(i)
-                #         time.sleep(0.02)
+                    for i in range(100):
+                        s.ChangeDutyCycle(i)
+                        time.sleep(0.02)
                         
-                #     for i in range(100):
-                #         s.ChangeDutyCycle(100 - i)
-                #         time.sleep(0.02)
-                #         s.stop()
+                    for i in range(100):
+                        s.ChangeDutyCycle(100 - i)
+                        time.sleep(0.02)
+                        s.stop()
 
         elif key.upper() == 'N':
             print("Try again!")
